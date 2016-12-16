@@ -2,18 +2,25 @@
 
 <p align="center"><img src ="logo.png" alt="RocketMQ-Learning logo" /></p>
 
-RocketMQ是一个性能很好的消息中间件，他在阿里内部有着广泛的使用。这本书适合于希望理解**RocketMQ设计原理**的读者，建议结合带注释的源码一起阅读。<br>
+Even if you have never used RocketMQ, Through this tutorial, You will have a thorough understanding of RocketMQ.<br>
 
-为什么我们要阅读这本mini书？
-* 这本书的目的是为了**弥补官方文档以及源码注释的稀少**。<br>
-* 即使你没有使用过RocketMQ，通过本书你也能很快入门。<br>
-* 通过本书，你可以学习到RocketMQ的设计理念(为什么可以做到如此高效？)。同时，你也能学习到计算机网络，操作系统相关的知识<br>
-* 本书同时提供了带注释的源代码，结合源码理解完本教程你甚至可以进行**二次开发**，定制你自己想要的功能。<br>
+Why should i read this book?
+* The purpose of this tutorial is to make up for <b>the lack of official documents</b> and <b>source code comments</b>.<br>
+* Through this tutorial, You will have a <b>good use</b> of RocketMQ
+* Through this tutorial, you can learn the <b>design principles</b> of RocketMQ, As well as the overall structure of RocketMQ
+* Meanwhile, You will learn something about <b>network programming, operating system</b>...
 
-本书从浅入深的介绍了RocketMQ的使用与设计原理，**运用了大量的图示**，即使是初学者也能很好的理解文章希望表达的意思。<br>
-推荐初学者从第1章开始阅读。<br>
+It includes:
 
-## 文章索引
+* The <b>design principles</b> of important modules, as well as code analysis
+* <b>A detailed source code comments</b>
+* Related information index, such as <b>Linux page cache</b>, <b>tcp/ip</b>, etc..
+
+You can use this tutorial as a mini book, This tutorials' directory can be shown as follows.<br>
+
+If you are using RocketMQ for the first time, it is recommended that you should start with the part1.
+
+## Article Index
 
 #### [1.Overview](book/1-overview.md)
 * Glossary explanation
