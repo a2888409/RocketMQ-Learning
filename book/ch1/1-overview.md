@@ -1,4 +1,4 @@
-#【RocketMQ原理解析一】整体介绍&IDE编译并启动RocketMQ的第一个例子
+#整体介绍&IDE编译并启动RocketMQ的第一个例子
 
 ------
 
