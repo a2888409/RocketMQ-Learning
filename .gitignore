@@ -1,0 +1,16 @@
+﻿*.log
+*.class
+*.jar
+.classpath
+.project
+.settings/
+target/
+*.log*
+*.iml
+.idea/
+*.versionsBackup
+*.DS_Store
+
+
+
+

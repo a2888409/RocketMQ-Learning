@@ -15,7 +15,6 @@ RocketMQ是一个性能很好的消息中间件，他在阿里内部有着广泛
 
 进度如下<br>
 - [x] 【RocketMQ原理解析1.1】整体介绍&IDE编译并启动RocketMQ的第一个例子
-
 - [ ] 【RocketMQ原理解析2.1】源码目录结构介绍&Remoting通信层
 - [ ] 【RocketMQ原理解析3.1】NameSrv源码解析
 - [ ] 【RocketMQ原理解析4.1】 Producer启动

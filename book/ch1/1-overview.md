@@ -4,7 +4,7 @@
 
 ##一、整体介绍
 在RocketMQ里，有以下几个核心的模块：**Producer**，**Consumer**，**Broker**，**NameSrv**。他们之间的关系如下：
-![arch](arch.jpg)
+![arch](arch.jpg)<br>
 
 先简单了解一下各个模块的功能，下面会有章节详细介绍各个模块的功能。
 
@@ -25,9 +25,9 @@
  
  3. 编辑windows环境变量：
  **ROCKETMQ_HOME**就是git clone下来的根目录
-![env](env.png)
-**NAMESRV_ADDR**端口号固定，ip根据**实际情况**确定(windows控制台输入ipconfig查看)
-![env2](env2.png)
+![env](env.png)<br>
+**NAMESRV_ADDR**端口号固定，ip根据**实际情况**确定(windows控制台输入ipconfig查看)<br>
+![env2](env2.png)<br>
 上面还有一点需要注意的是，设置完环境变量后，最好重启一下电脑，否则消费者和生产者可能找不到namesrv的地址，而无法获取对应topic的路由信息产生"No route info of this topic"。
 如果未设置NAMESRV_ADDR，则需要在生产者和消费者的代码里指定名称服务地址：
      >producer.setNamesrvAddr("192.168.111.200:9876");
@@ -41,7 +41,7 @@
 	    -Duser.home=D:\MyProject\code\RocketMQ\user.home
 
 	上面的user.home指定了MQ的用户目录，里面包括broker存储产生的commitlog文件，日志文件，json配置文件，consumequeue相关信息，简单了解即可。
-	![namesrvconfig](namesrvconfig.png)
+	![namesrvconfig](namesrvconfig.png)<br>
 
  5. 启动Broker，Broker的配置与Namesrv类似，但是启动参数需要指定namesrv的地址：
      >-n 192.168.111.200:9876
@@ -51,10 +51,10 @@
 -Duser.home=D:\MyProject\code\RocketMQ\user.home
 -Drocketmq.namesrv.addr=192.168.111.200:9876
 
- ![brokerconfig.png](brokerconfig.png)
+ ![brokerconfig.png](brokerconfig.png)<br>
   
   启动成功后将在控制台看到类似这样的提示，若没有请不要往下，请检查配置：
-![brokerStartup.png](brokerStartup.png)
+![brokerStartup.png](brokerStartup.png)<br>
 
  6. 启动consumer，先指定主类：
 	>com.alibaba.rocketmq.example.simple.PushConsumer
@@ -69,5 +69,5 @@
 	 
   这里要注意Producet生产的message topic要和consumer订阅的topic以及tag对应上。
   然后就可以看到控制台源源不断的输出了：
-  ![output.png](output.png)
+  ![output.png](output.png)<br>
 
