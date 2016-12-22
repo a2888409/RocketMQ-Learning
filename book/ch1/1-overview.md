@@ -32,7 +32,7 @@
 如果未设置NAMESRV_ADDR，则需要在生产者和消费者的代码里指定名称服务地址：
      >producer.setNamesrvAddr("192.168.111.200:9876");
 
- 4. 启动NameSrv：
+ 4. 启动NameSrv：<br>
 	 (1) 在IDEA的application configuration内配置主类：
      >com.alibaba.rocketmq.namesrv.NamesrvStartup
      
