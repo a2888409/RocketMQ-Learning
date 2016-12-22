@@ -1,7 +1,5 @@
 #整体介绍&IDE编译并启动RocketMQ的第一个例子
 
-------
-
 ##一、整体介绍
 在RocketMQ里，有以下几个核心的模块：**Producer**，**Consumer**，**Broker**，**NameSrv**。他们之间的关系如下：
 ![arch](arch.jpg)<br>
@@ -36,7 +34,7 @@
 	 (1) 在IDEA的application configuration内配置主类：
      >com.alibaba.rocketmq.namesrv.NamesrvStartup
      
-     (2) 根据**实际路径**配置VM option中的环境变量：
+     (2) 根据**实际路径**配置VM option中的环境变量：<br>
      >-Drocketmq.home.dir=D:\MyProject\code\RocketMQ
 	    -Duser.home=D:\MyProject\code\RocketMQ\user.home
 
