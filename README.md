@@ -15,7 +15,7 @@ RocketMQ是一个性能很好的消息中间件，他在阿里内部有着广泛
 
 进度如下<br>
 - [x] 【RocketMQ原理解析1.1】整体介绍&IDE编译并启动RocketMQ的第一个例子
-- [ ] 【RocketMQ原理解析2.1】源码目录结构介绍&Remoting通信层
+- [x] 【RocketMQ原理解析2.1】源码目录结构介绍&Remoting通信层
 - [ ] 【RocketMQ原理解析3.1】NameSrv源码解析
 - [ ] 【RocketMQ原理解析4.1】 Producer启动
 - [ ] 【RocketMQ原理解析4.2】 Producer发送普通消息&发送端负载均衡
@@ -32,11 +32,18 @@ RocketMQ是一个性能很好的消息中间件，他在阿里内部有着广泛
 
 ## 文章索引
 
-#### [【RocketMQ原理解析一】整体介绍&IDE编译并启动RocketMQ的第一个例子](book/ch1/1-overview.md)
+#### [【RocketMQ原理解析1.1】整体介绍&IDE编译并启动RocketMQ的第一个例子](book/ch1/1-overview.md)
 * 整体介绍
 * IDE中启动第一个例子
 
-#### 【RocketMQ原理解析二】整体介绍&IDE编译并启动RocketMQ的第一个例子
+#### [【RocketMQ原理解析2.1】源码目录结构介绍&Remoting通信层](book/ch2/2-remoting.md)
+* 源码目录结构介绍
+* Netty基础
+* 消息格式
+* rocketmq-remoting通信层原理介绍
+
+
+
 
 
 
