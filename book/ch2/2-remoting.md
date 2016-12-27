@@ -18,7 +18,7 @@ RocketMQ源码分为以下几个package：
 ##二：rocketmq-remoting通信层介绍
 remoting模块是mq的基础通信模块，理解通信层的原理对理解模块间的交互很有帮助。底层基于Netty网络库驱动，因此需要先了解一些基本的Netty原理。
 ###1、Netty基本知识
-![nettyThread](http://img.blog.csdn.net/20161223114518407?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTI4ODg0MDk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast) <br>
+![nettyThread](netty_thread_module.png) <br>
 首先，我们需要了解Netty的线程模型：Netty运用了**reactor**模式，采用了**监听线程池**和**IO线程池分离**的思想，数据的流转在Netty中采取了类似**职责链**的设计模式，因此数据看起来就像在管道中流动一样了。<br>
 现在我们只需要知道，我们能够定义自己的handler并插入管道即可实现对数据的操作了。目前大致了解即可，稍后我们会结合mq的代码讲解。
 
@@ -28,18 +28,18 @@ remoting模块是mq的基础通信模块，理解通信层的原理对理解模�
 
 ###2、mq通信协议
 ####(1) 消息格式
- ![proto](http://img.blog.csdn.net/20161223142447732?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTI4ODg0MDk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast) <br>
+ ![proto](proto.png) <br>
   重点关注一下header字段，他有2种编码方式，一种**JSON**格式，另一种是ROCKETMQ格式。重点关注JSON格式：
   <br>
-![header](http://img.blog.csdn.net/20161223144700702?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTI4ODg0MDk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast) <br>
+![header](protp_header.png) <br>
 这里直接引用了官方文档里的图片，`RequestCode.java`和`ResponseCode.java`文件包含了所有的操作码，推荐调试2个模块之间的通信的时候可以以操作码为索引。一个实际的请求如图：
 <br>
-![header_actual](http://img.blog.csdn.net/20161223144922221?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTI4ODg0MDk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast) <br>
+![header_actual](header.png) <br>
 code=103表示他是一个`REGISTER_BROKER`消息
 <br>
 ####(2) mq的消息处理逻辑
 那么，对于一个实际的请求，mq是如何进行编解码以及分发请求的呢？比较重要的两个类包括NettyRemotingClient和NettyRemotingServer，这里以NettyRemotingServer为例子先看它的启动：
-![remotingServer_start](http://img.blog.csdn.net/20161223145559200?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTI4ODg0MDk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast) <br>
+![remotingServer_start](remotingServer_start.png) <br>
 可以看到ch.pipeline().addLast就是往管道里添加数据的处理逻辑，首先需要知道对于每一个事件处理器handler，他可以处理的事件包括了以下几种(覆盖父类方法即可实现)，只要满足条件数据会经过每一个handler对应的事件处理方法：
 
  - `channelActive`、`channelInactive`：**连接建立**和**连接关闭**的时候会被回调。
@@ -54,7 +54,7 @@ code=103表示他是一个`REGISTER_BROKER`消息
  - `NettyServerHandler`：当一个消息经过前面的解码等步骤后，然后调度到channelRead0方法，然后根据消息类型进行分发
  <br>
  继续跟踪`NettyServerHandler`代码：
-![delegate](http://img.blog.csdn.net/20161223155121134?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTI4ODg0MDk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast) <br>
+![delegate](delegate_message.png) <br>
  <br>
 **(a)处理消息请求processRequestCommand**<br>
 首先看`NettyRemotingAbstract`类中的一个成员：
@@ -68,17 +68,11 @@ final RequestTask requestTask = new RequestTask(run, ctx.channel(), cmd);
 pair.getObject2().submit(requestTask);
  ```
  在RocketMQ中能看到很多地方都是这样的处理，这样的设计能够最大程度的保证**异步**，保证每个线程都专注处理自己负责的东西。 以下是`Processor`的实现：<br>
-![processer-implement](http://img.blog.csdn.net/20161223170522861?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTI4ODg0MDk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast) <br>
+![processer-implement](processer_implement.png) <br>
 <br>
 最后，`processRequestCommand`这个函数的整体处理逻辑如下所示：
-```flow
-st=>start: Find Processor
-op=>operation: Build Msg Runnable Task
-op2=>operation: submit Task
-e=>end
+![flow](flow1.png) <br>
 
-st->op->op2
-```
  另外，要注意一下，第二步构建task的时候，运用了**模板设计模式**，在任务的执行前后加入了一个hook：我们可以利用这个hook进行一些额外的操作，比如消息的加密解密。
 
 ```
@@ -99,20 +93,7 @@ opaque表示请求发起连接方在同个连接上不同的请求标识代码�
  - 对于**同步消息**，这二个参数通常是个null。
  - 对于**异步消息**，`invokeCallback`的作用就是在收到消息响应的时候能够根据`responseTable`找到操作码对应的回调函数；`semaphore`的主要作用是用作**流控**，当多个线程同时往一个连接写数据时可以通过信号量控制permit同时写许可的数量。
 简单来说，总体流程如下：
-```flow
-st=>start: Start
-cond=>condition: sync msg?
-op1=>operation: invokeCallBack
-op2=>operation: wakeup send thread
-e=>end
-
-st->cond
-cond(yes)->op1
-cond(no)->op2
-op1->e
-op2->e
-
-```
+![flow](flow2.png) <br>
 当然，流程图未列举的操作还包括释放信号量资源，以及清空`responseTable`表相关键值对信息等操作。<br>
 <br>
 `NettyRemotingClient`的处理实际上与·NettyRemotingServer·的处理基本一致，唯一不同的是Netty pipeline中**连接管理**相关的handler额外还处理了`connect事件`，该事件在客户端主动连接对端成功后回调。
