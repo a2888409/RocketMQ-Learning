@@ -3,15 +3,15 @@
 ##一：源码目录结构介绍
 RocketMQ源码分为以下几个package：
 
- - `rocketmq-broker`：整个mq的核心，他能够接受producer和consumer的请求，并调用store层服务对消息进行处理。HA服务的基本单元，支持同步双写，异步双写等模式。
- - `rocketmq-clien`：：mq客户端实现，目前官方仅仅开源了java版本的mq客户端，c++，go客户端有社区开源贡献。
- - `rocketmq-common`：一些模块间通用的功能类，比如一些配置文件、常量。
- - `rocketmq-example`：官方提供的例子，对典型的功能比如order message，push consumer，pull consumer的用法进行了示范。
- - `rocketmq-filtersrv`：消息过滤服务，相当于在broker和consumer中间加入了一个filter代理。
- - `rocketmq-remoting`：基于netty的底层通信实现，所有服务间的交互都基于此模块。
+ - `rocketmq-broker`：整个mq的核心，他能够接受producer和consumer的请求，并调用store层服务对消息进行处理。**HA服务**的基本单元，支持**同步双写**，**异步双写**等模式。
+ - `rocketmq-clien`：：mq客户端实现，目前官方仅仅开源了java版本的**mq客户端**，c++，go客户端有社区开源贡献。
+ - `rocketmq-common`：一些模块间通用的**功能类**，比如一些配置文件、常量。
+ - `rocketmq-example`：官方提供的**例子**，对典型的功能比如order message，push consumer，pull consumer的用法进行了示范。
+ - `rocketmq-filtersrv`：消息**过滤**服务，相当于在broker和consumer中间加入了一个filter代理。
+ - `rocketmq-remoting`：基于netty的底层**通信实现**，所有服务间的交互都基于此模块。
  - `rocketmq-srvut`：解析命令行的工具类。
- - ``rocketmq-store`：存储层实现，同时包括了索引服务，高可用HA服务实现。
- - `rocketmq-tools`：mq集群管理工具，提供了消息查询等功能。
+ - ``rocketmq-store`：存储层实现，同时包括了**索引**服务，高可用**HA**服务实现。
+ - `rocketmq-tools`：mq**集群管理**工具，提供了消息查询等功能。
 
 
 ----------
@@ -56,7 +56,7 @@ code=103表示他是一个`REGISTER_BROKER`消息
  继续跟踪`NettyServerHandler`代码：
 ![delegate](delegate_message.png) <br>
  <br>
- 
+ _接下去的代码的处理逻辑分为处理消息请求和消息响应。<br>_
 **(a)处理消息请求processRequestCommand**<br>
 首先看`NettyRemotingAbstract`类中的一个成员：
  ```
@@ -71,7 +71,7 @@ pair.getObject2().submit(requestTask);
  在RocketMQ中能看到很多地方都是这样的处理，这样的设计能够最大程度的保证**异步**，保证每个线程都专注处理自己负责的东西。 以下是`Processor`的实现：<br>
 ![processer-implement](processer_implement.png) <br>
 <br>
-最后，`processRequestCommand`这个函数的整体处理逻辑如下所示：
+最后，`processRequestCommand`这个函数的整体处理逻辑如下所示：<br>
 ![flow](flow1.png) <br>
 
  另外，要注意一下，第二步构建task的时候，运用了**模板设计模式**，在任务的执行前后加入了一个hook：我们可以利用这个hook进行一些额外的操作，比如消息的加密解密。
