@@ -56,6 +56,7 @@ code=103表示他是一个`REGISTER_BROKER`消息
  继续跟踪`NettyServerHandler`代码：
 ![delegate](delegate_message.png) <br>
  <br>
+ 
 **(a)处理消息请求processRequestCommand**<br>
 首先看`NettyRemotingAbstract`类中的一个成员：
  ```
@@ -75,12 +76,12 @@ pair.getObject2().submit(requestTask);
 
  另外，要注意一下，第二步构建task的时候，运用了**模板设计模式**，在任务的执行前后加入了一个hook：我们可以利用这个hook进行一些额外的操作，比如消息的加密解密。
 
-```
+ ```
 rpcHook.doBeforeRequest(RemotingHelper.parseChannelRemoteAddr(ctx.channel()), cmd);
 Processor.processRequest()
 rpcHook.doAfterResponse(RemotingHelper.parseChannelRemoteAddr(ctx.channel()), cmd, response);
 ```
- <br>
+<br>
 **(b)处理消息响应processResponseCommand**<br>
 实际上，这部分的处理并不是太难，首先理解下面这个结构：
 
@@ -91,8 +92,8 @@ opaque表示请求发起连接方在同个连接上不同的请求标识代码�
 重点讲解一下`ResponseFuture`这个类，这个类中比较重要的成员包括一个回调函数`invokeCallback`，以及一个信号量`semaphore`。
 
  - 对于**同步消息**，这二个参数通常是个null。
- - 对于**异步消息**，`invokeCallback`的作用就是在收到消息响应的时候能够根据`responseTable`找到操作码对应的回调函数；`semaphore`的主要作用是用作**流控**，当多个线程同时往一个连接写数据时可以通过信号量控制permit同时写许可的数量。
-简单来说，总体流程如下：
+ - 对于**异步消息**，`invokeCallback`的作用就是在收到消息响应的时候能够根据`responseTable`找到操作码对应的回调函数；`semaphore`的主要作用是用作**流控**，当多个线程同时往一个连接写数据时可以通过信号量控制permit同时写许可的数量。<br>
+简单来说，总体流程如下：<br>
 ![flow](flow2.png) <br>
 当然，流程图未列举的操作还包括释放信号量资源，以及清空`responseTable`表相关键值对信息等操作。<br>
 <br>
