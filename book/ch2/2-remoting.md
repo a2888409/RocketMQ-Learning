@@ -45,9 +45,9 @@ code=103表示他是一个`REGISTER_BROKER`消息
  - `channelActive`、`channelInactive`：**连接建立**和**连接关闭**的时候会被回调。
  - `channelRead`：当channel有数据**可读**时会回调到这个函数。mq正是从这个函数将请求分发到后端线程进行处理的。
  - `exceptionCaught`：发生**异常**时回调。
- - `userEventTriggered`：当上面的事件都不满足自己的需求时，用户可以在这里面**自定义**的事件处理方法。
+ - `userEventTriggered`：当上面的事件都不满足自己的需求时，用户可以在这里面**自定义**的事件处理方法。<br>
 <br>
-现在回头来看，mq的**pipeline管道**定义如下handler的含义：
+_现在回头来看，mq的**pipeline管道**定义如下handler的含义：_
  - `NettyEncoder`、`NettyDecoder`：mq对应的编码器和解码器的逻辑，他们分别覆盖了父类的**encode**和**decode**方法。
  -  `IdleStateHandler`：Netty自带的心跳管理器
  - `NettyConnetManageHandle`：连接管理器，他负责捕获新连接、连接断开、异常等事件，然后统一调度到NettyEventExecuter处理器处理。
